@@ -11,12 +11,27 @@ MAX_MENSAJE = 500
 
 
 def validar_mensaje(message):
+    """
+    Valida que el mensaje no esté vacío, no contenga solo espacios
+    y no supere la longitud máxima permitida.
+    """
+
+    # recv() devuelve bytes, por eso rechazamos otros tipos.
+    if not isinstance(message, bytes):
+        return False
+
     if not message:
         return False
 
-    texto = message.decode("utf-8").strip()
+    try:
+        texto = message.decode("utf-8").strip()
+    except UnicodeDecodeError:
+        return False
 
     if not texto:
+        return False
+
+    if len(texto) > MAX_MENSAJE:
         return False
 
     return True
